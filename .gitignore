@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.Python
+venv/
+.venv/
+env/
+ENV/
+
+# Environment secrets — NEVER commit these
+.env
+.env.*
+*.env
+
+# Uploads folder (runtime data)
+backend/uploads/
+
+# Alembic versions (optional — remove if you version them)
+# backend/alembic/versions/
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

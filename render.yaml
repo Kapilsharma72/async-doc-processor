@@ -1,0 +1,63 @@
+databases:
+  - name: docflow-db
+    plan: free
+    region: oregon
+
+services:
+  # ── Redis / Key Value Instance ──────────────────────────────────────────
+  - type: redis
+    name: docflow-redis
+    plan: free
+    region: oregon
+    ipAllowList: []
+
+  # ── FastAPI Web Server ──────────────────────────────────────────────────
+  - type: web
+    name: docflow-api
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: docflow-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: docflow-redis
+          property: connectionString
+      - key: UPLOAD_DIR
+        value: /tmp/uploads
+      - key: ALLOWED_ORIGINS
+        sync: false          # set to your Vercel URL after deployment
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+
+  # ── Celery Worker ───────────────────────────────────────────────────────
+  - type: worker
+    name: docflow-worker
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A app.worker.celery_app.celery_app worker --loglevel=info --concurrency=2
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: docflow-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: docflow-redis
+          property: connectionString
+      - key: UPLOAD_DIR
+        value: /tmp/uploads
+      - key: PYTHON_VERSION
+        value: "3.11.0"
