@@ -363,10 +363,10 @@ export default function JobDetailPage() {
         {/* Export */}
         {doc.finalized === "true" && (
           <div className="mt-5 grid grid-cols-2 gap-4 animate-fade-slide">
-            {[
+            {([
               { format: "json", label: "Export JSON", icon: "{ }" },
               { format: "csv", label: "Export CSV", icon: "," },
-            ].map(({ format, label, icon }) => (
+            ] as const).map(({ format, label, icon }) => (
               <a
                 key={format}
                 href={api.exportUrl(doc.id, format)}
