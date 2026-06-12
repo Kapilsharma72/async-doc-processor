@@ -24,7 +24,8 @@ t.start()
 # 2. Run Celery in the main process
 print("Starting Celery worker...")
 celery_args = [
-    "celery",
+    sys.executable,
+    "-m", "celery",
     "-A", "app.worker.celery_app.celery_app",
     "worker",
     "--loglevel=info",
