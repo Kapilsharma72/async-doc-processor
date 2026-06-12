@@ -4,13 +4,6 @@ databases:
     region: oregon
 
 services:
-  # ── Redis / Key Value Instance ──────────────────────────────────────────
-  - type: redis
-    name: docflow-redis
-    plan: free
-    region: oregon
-    ipAllowList: []
-
   # ── FastAPI Web Server ──────────────────────────────────────────────────
   - type: web
     name: docflow-api
@@ -27,14 +20,11 @@ services:
           name: docflow-db
           property: connectionString
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: docflow-redis
-          property: connectionString
+        sync: false          # Enter your existing free vedaai-redis Internal Connection String
       - key: UPLOAD_DIR
         value: /tmp/uploads
       - key: ALLOWED_ORIGINS
-        sync: false          # set to your Vercel URL after deployment
+        sync: false          # Set to Vercel URL after deployment
       - key: PYTHON_VERSION
         value: "3.11.0"
 
@@ -53,10 +43,7 @@ services:
           name: docflow-db
           property: connectionString
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: docflow-redis
-          property: connectionString
+        sync: false          # Enter your existing free vedaai-redis Internal Connection String
       - key: UPLOAD_DIR
         value: /tmp/uploads
       - key: PYTHON_VERSION
